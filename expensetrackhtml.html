@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="expensetrackcss.css">
+</head>
+<body>
+
+  <h1>Expense Tracker</h1>
+  <div class="balance" id="balance">$0.00</div>
+
+  <form id="transaction-form">
+    <select id="type" required>
+      <option value="income">Income</option>
+      <option value="expense">Expense</option>
+    </select>
+    <input type="number" id="amount" placeholder="Amount" step="0.01" required />
+    <input type="text" id="description" placeholder="Description" />
+    <input type="text" id="categoryInput" placeholder="Category (e.g., food, transport)" />
+    <button type="submit">Add Transaction</button>
+  </form>
+
+ 
+  <div class="filter-section">
+    <h3>Filter Transactions</h3>
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="filter">Type</label>
+        <select id="filter">
+          <option value="all">All</option>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="all">All Categories</option>
+          <option value="food">Food</option>
+          <option value="transport">Transport</option>
+          <option value="utilities">Utilities</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <button id="show-filter-btn" style="width: 100%;">
+        Search
+      </button>
+    </div>
+  </div>
+
+  <h2>Transactions</h2>
+  <ul id="transactions"></ul>
+
+  <script src="expensetrackjs.js">
+  </script>
+</body>
+</html>
