@@ -2,7 +2,6 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
     const form = document.getElementById('transaction-form');
     const transactionList = document.getElementById('transactions');
-    const balanceElement = document.getElementById('balance');
     const filterSelect = document.getElementById('filter');
     const categorySelect = document.getElementById('category');
     const showFilterBtn = document.getElementById('show-filter-btn');
@@ -12,12 +11,24 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
     }
 
     function updateBalance(filteredTransactions = transactions) {
-      const balance = filteredTransactions.reduce((total, t) => {
-        return t.type === 'income' ? total + t.amount : total - t.amount;
-      }, 0);
-      balanceElement.textContent = `$${balance.toFixed(2)}`;
-      balanceElement.className = balance >= 0 ? 'balance positive' : 'balance negative';
-    }
+  const income = filteredTransactions
+    .filter(t => t.type === 'income')
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const expenses = filteredTransactions
+    .filter(t => t.type === 'expense')
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const balance = income - expenses;
+
+  
+  
+  
+  document.getElementById('summary-income').textContent = `$${income.toFixed(2)}`;
+  document.getElementById('summary-expense').textContent = `$${expenses.toFixed(2)}`;
+  document.getElementById('summary-balance').textContent = `$${balance.toFixed(2)}`;
+}
+
 
     function renderTransactions(filtered = transactions) {
       transactionList.innerHTML = '';

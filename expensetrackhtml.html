@@ -9,8 +9,7 @@
 <body>
 
   <h1>Expense Tracker</h1>
-  <div class="balance" id="balance">$0.00</div>
-
+  
   <form id="transaction-form">
     <select id="type" required>
       <option value="income">Income</option>
@@ -51,10 +50,25 @@
       </button>
     </div>
   </div>
+  
+<div class="summary-container">
+  <div class="summary-box income-box">
+    <div>Income</div>
+    <div id="summary-income">$0.00</div>
+  </div>
+  <div class="summary-box expense-box">
+    <div>Expenses</div>
+    <div id="summary-expense">$0.00</div>
+  </div>
+  <div class="summary-box balance-box">
+    <div>Balance</div>
+    <div id="summary-balance">$0.00</div>
+  </div>
+</div>
+
 
   <h2>Transactions</h2>
   <ul id="transactions"></ul>
-
   <script src="expensetrackjs.js">
   </script>
 </body>

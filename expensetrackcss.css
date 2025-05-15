@@ -31,19 +31,6 @@ h3 {
   font-size: 1.1rem;
 }
 
-.balance {
-  font-size: 1.6rem;
-  text-align: center;
-  margin: 20px 0;
-  padding: 15px;
-  border-radius: 8px;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  font-weight: 600;
-}
-
-.positive { color: #27ae60; }
-.negative { color: #e74c3c; }
 
 form, .filter-section {
   background: white;
@@ -173,3 +160,35 @@ li:hover {
       background: #2980b9;
     }
        
+.summary-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.summary-box {
+  flex: 1;
+  padding: 15px;
+  border-radius: 8px;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.income-box {
+  background-color: #2ecc71;
+}
+
+.expense-box {
+  background-color: #e74c3c;
+}
+
+.balance-box {
+  background-color: #3498db;
+}
