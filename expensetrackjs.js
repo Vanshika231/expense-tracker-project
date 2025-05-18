@@ -59,6 +59,8 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
           transactions = transactions.filter(t => t.id !== id);
           saveTransactions();
           applyFilter();
+          drawExpenseChart(transactions);
+
         });
       });
 
@@ -73,6 +75,8 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         const matchType = type === 'all' || t.type === type;
         const matchCategory = category === 'all' || t.category === category;
         return matchType && matchCategory;
+        drawExpenseChart(transactions);
+
       });
 
       renderTransactions(filtered);
@@ -97,6 +101,8 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
       saveTransactions();
       form.reset();
       applyFilter();
+      drawExpenseChart(transactions);
+
     });
 
     showFilterBtn.addEventListener('click', function () {
@@ -105,3 +111,48 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
     
     applyFilter();
+    function drawExpenseChart(filteredTransactions = transactions) {
+  const canvas = document.getElementById('expenseChart');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const expenseData = {};
+  filteredTransactions
+    .filter(t => t.type === 'expense')
+    .forEach(t => {
+      const category = t.category || 'Other';
+      expenseData[category] = (expenseData[category] || 0) + t.amount;
+    });
+
+  const total = Object.values(expenseData).reduce((a, b) => a + b, 0);
+  if (total === 0) return;
+
+  const colors = ['#e74c3c', '#3498db', '#f39c12', '#2ecc71', '#9b59b6', '#1abc9c'];
+  const categories = Object.keys(expenseData);
+  const values = Object.values(expenseData);
+
+  let startAngle = 0;
+
+  values.forEach((amount, i) => {
+    const sliceAngle = (amount / total) * 2 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(150, 150);
+    ctx.arc(150, 150, 100, startAngle, startAngle + sliceAngle);
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+    startAngle += sliceAngle;
+  });
+
+  // Optional labels
+  startAngle = 0;
+  values.forEach((amount, i) => {
+    const sliceAngle = (amount / total) * 2 * Math.PI;
+    const midAngle = startAngle + sliceAngle / 2;
+    const x = 150 + Math.cos(midAngle) * 70;
+    const y = 150 + Math.sin(midAngle) * 70;
+    ctx.fillStyle = "#000";
+    ctx.font = "12px sans-serif";
+    ctx.fillText(categories[i], x - 20, y);
+    startAngle += sliceAngle;
+  });
+}
