@@ -17,7 +17,13 @@
     </select>
     <input type="number" id="amount" placeholder="Amount" step="0.01" required />
     <input type="text" id="description" placeholder="Description" />
-    <input type="text" id="categoryInput" placeholder="Category (e.g., food, transport)" />
+    <select id="categoryInput" required>
+  <option value="food">Food</option>
+  <option value="transport">Transport</option>
+  <option value="utilities">Utilities</option>
+  <option value="other" selected>Other</option>
+</select>
+
     <button type="submit">Add Transaction</button>
   </form>
 
@@ -33,6 +39,7 @@
           <option value="expense">Expense</option>
         </select>
       </div>
+      
       <div class="filter-group">
         <label for="category">Category</label>
         <select id="category">
@@ -50,6 +57,13 @@
       </button>
     </div>
   </div>
+  <div class="budget-section">
+  <h3>Set Monthly Budget</h3>
+  <input type="number" id="budgetInput" placeholder="Enter budget amount" />
+  <button id="setBudgetBtn">Set Budget</button>
+  <div id="budgetDisplay"></div>
+</div>
+
   
 <div class="summary-container">
   <div class="summary-box income-box">

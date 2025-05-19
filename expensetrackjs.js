@@ -1,6 +1,47 @@
-let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+let transactions = [];
+let budgetLimit = parseFloat(localStorage.getItem('budgetLimit')) || 0; 
+const currentMonth = new Date().getMonth();
+const savedMonth = localStorage.getItem('budgetMonth');
+
+if (savedMonth === null || parseInt(savedMonth) !== currentMonth) {
+  transactions = [];
+  budgetLimit = 0;
+  localStorage.removeItem('transactions');
+  localStorage.removeItem('budgetLimit');
+  localStorage.setItem('budgetMonth', currentMonth);
+  alert("New month detected. Data has been reset.");
+} else {
+  transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+}
+
 
     const form = document.getElementById('transaction-form');
+    
+const budgetInput = document.getElementById('budgetInput');
+const setBudgetBtn = document.getElementById('setBudgetBtn');
+const budgetDisplay = document.getElementById('budgetDisplay');
+
+
+setBudgetBtn.addEventListener('click', () => {
+  const value = parseFloat(budgetInput.value);
+  if (!isNaN(value) && value > 0) {
+    budgetLimit = value;
+    localStorage.setItem('budgetLimit', budgetLimit);
+    budgetInput.value = '';
+    displayBudget();
+    applyFilter(); 
+  }
+});
+
+
+function displayBudget() {
+  if (budgetLimit > 0) {
+    budgetDisplay.textContent = `Budget: $${budgetLimit.toFixed(2)}`;
+  } else {
+    budgetDisplay.textContent = '';
+  }
+}
+
     const transactionList = document.getElementById('transactions');
     const filterSelect = document.getElementById('filter');
     const categorySelect = document.getElementById('category');
@@ -21,14 +62,15 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
   const balance = income - expenses;
 
-  
-  
-  
   document.getElementById('summary-income').textContent = `$${income.toFixed(2)}`;
   document.getElementById('summary-expense').textContent = `$${expenses.toFixed(2)}`;
   document.getElementById('summary-balance').textContent = `$${balance.toFixed(2)}`;
-}
 
+  
+  if (budgetLimit > 0 && expenses > budgetLimit) {
+    alert(`⚠️ You have exceeded your budget of $${budgetLimit.toFixed(2)}!`);
+  }
+}
 
     function renderTransactions(filtered = transactions) {
       transactionList.innerHTML = '';
@@ -67,25 +109,31 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
       updateBalance(filtered);
     }
 
-    function applyFilter() {
-      const type = filterSelect.value;
-      const category = categorySelect.value;
+    
+        function applyFilter() {
+  const type = filterSelect.value;
+  const category = categorySelect.value;
 
-      const filtered = transactions.filter(t => {
-        const matchType = type === 'all' || t.type === type;
-        const matchCategory = category === 'all' || t.category === category;
-        return matchType && matchCategory;
-        drawExpenseChart(transactions);
+  const filtered = transactions.filter(t => {
+    const matchType = type === 'all' || t.type === type;
+    const matchCategory = category === 'all' || t.category === category;
+    return matchType && matchCategory;
+  });
 
-      });
+  renderTransactions(filtered);
+  drawExpenseChart(filtered); // draw chart based on filtered data
+}
 
-      renderTransactions(filtered);
-    }
+
+  
+
+      
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       const type = document.getElementById('type').value;
       const amount = parseFloat(document.getElementById('amount').value);
+      
       const description = document.getElementById('description').value || 'No description';
       const category = document.getElementById('categoryInput').value || 'other';
 
@@ -111,6 +159,10 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
     
     applyFilter();
+    displayBudget();
+    drawExpenseChart(transactions);
+
+
     function drawExpenseChart(filteredTransactions = transactions) {
   const canvas = document.getElementById('expenseChart');
   const ctx = canvas.getContext('2d');
@@ -143,7 +195,7 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
     startAngle += sliceAngle;
   });
 
-  // Optional labels
+  
   startAngle = 0;
   values.forEach((amount, i) => {
     const sliceAngle = (amount / total) * 2 * Math.PI;
@@ -155,4 +207,4 @@ let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
     ctx.fillText(categories[i], x - 20, y);
     startAngle += sliceAngle;
   });
-}
+      }

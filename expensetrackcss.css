@@ -196,3 +196,16 @@ li:hover {
   display: block;
   margin: 0 auto 20px;
 }
+.budget-section {
+  background: white;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#budgetDisplay {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #e67e22;
+}
